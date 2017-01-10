@@ -32,6 +32,8 @@ other_identifier = getattr(E, 'other-identifier')
 activity_status = getattr(E, 'activity-status')
 recipient_country = getattr(E, 'recipient-country')
 recipient_region = getattr(E, 'recipient-region')
+conditions = getattr(E, 'conditions')
+condition = getattr(E, 'condition')
 sector = getattr(E, 'sector')
 document_link = getattr(E, 'document-link')
 owner_org = getattr(E, 'owner-org')
@@ -106,6 +108,8 @@ class ActivityXMLTestCase(TestCase):
         transaction1 = activity.transaction_set.all()[0]
         provider_org1 = transaction1.provider_organisation
         receiver_org1 = transaction1.receiver_organisation
+        conditions1 = activity.conditions_set.all()[0]
+        condition1 = conditions1.condition_set.all()[0]
         transaction_sector1 = transaction1.transactionsector_set.all()[0]
         transaction_recipient_country1 = transaction1.transactionrecipientcountry_set.all()[0]
         transaction_recipient_region1 = transaction1.transactionrecipientregion_set.all()[0]
@@ -294,6 +298,13 @@ class ActivityXMLTestCase(TestCase):
                                 "format": document_link1.file_format.code,
                                 "url": document_link1.url,
                             }
+                            ),
+                        conditions(
+                            condition(
+                                narrative("Conditions text"),
+                                narrative("Conditions texte"),
+                                **{"type": condition1.type.code,}),
+                            **{"attached": boolToNum(conditions1.attached),}
                             ),
                         **{
                             "hierarchy": str(activity.hierarchy),
